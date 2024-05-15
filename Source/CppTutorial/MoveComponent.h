@@ -48,7 +48,7 @@ private:
 
 	// Enable the movement of the component
 	UPROPERTY(EditAnywhere)
-	bool MoveEnable = true;
+	bool MoveEnable = false;
 
 	// on Extream reached event
 	UPROPERTY(BlueprintAssignable)
