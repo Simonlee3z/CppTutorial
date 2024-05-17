@@ -1,46 +1,37 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "XPPawn.h"
-#include "MoveComponent.h"
+#include "XPCharacter.h"
 
 // Sets default values
-AXPPawn::AXPPawn()
+AXPCharacter::AXPCharacter()
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Setup component hierarchy
-	MovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("MovementComponent"));
-
 	PlayerMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlayerMesh"));
-	RootComponent = PlayerMesh;
+	PlayerMesh->SetupAttachment(GetCapsuleComponent());
 	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
-	PlayerCamera->SetupAttachment(PlayerMesh);
-
-	MovementComponent->MaxSpeed = 600.f;  // 最大速度
-	MovementComponent->Acceleration = 2048.f;  // 加速度
-	MovementComponent->Deceleration = 2048.f;  // 减速度
+	PlayerCamera->SetupAttachment(GetCapsuleComponent());
 }
 
 // Called when the game starts or when spawned
-void AXPPawn::BeginPlay()
+void AXPCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	bUseControllerRotationPitch = true;
-	bUseControllerRotationYaw = true;
-	
+
 }
 
 // Called every frame
-void AXPPawn::Tick(float DeltaTime)
+void AXPCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
 // Called to bind functionality to input
-void AXPPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AXPCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
@@ -56,13 +47,13 @@ void AXPPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	if (UEnhancedInputComponent* Input = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		Input->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AXPPawn::Move);
-		Input->BindAction(LookAction, ETriggerEvent::Triggered, this, &AXPPawn::Look);
-		Input->BindAction(MoveudAction, ETriggerEvent::Triggered, this, &AXPPawn::UpAndDown);
+		Input->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AXPCharacter::Move);
+		Input->BindAction(LookAction, ETriggerEvent::Triggered, this, &AXPCharacter::Look);
+		Input->BindAction(MoveudAction, ETriggerEvent::Triggered, this, &AXPCharacter::UpAndDown);
 	}
 }
 
-void AXPPawn::Move(const FInputActionValue& InputValue)
+void AXPCharacter::Move(const FInputActionValue& InputValue)
 {
 	FVector2D InputVector = InputValue.Get<FVector2D>();
 
@@ -81,7 +72,7 @@ void AXPPawn::Move(const FInputActionValue& InputValue)
 	}
 }
 
-void AXPPawn::Look(const FInputActionValue& InputValue)
+void AXPCharacter::Look(const FInputActionValue& InputValue)
 {
 	FVector2D InputVector = InputValue.Get<FVector2D>();
 
@@ -92,7 +83,7 @@ void AXPPawn::Look(const FInputActionValue& InputValue)
 	}
 }
 
-void AXPPawn::UpAndDown(const FInputActionValue& InputValue)
+void AXPCharacter::UpAndDown(const FInputActionValue& InputValue)
 {
 	float Value = InputValue.Get<float>();
 
@@ -104,10 +95,4 @@ void AXPPawn::UpAndDown(const FInputActionValue& InputValue)
 		//UE_LOG(LogTemp, Warning, TEXT("Up/Down Input Value: %f"), Value);
 	}
 }
-
-
-
-
-
-
 
