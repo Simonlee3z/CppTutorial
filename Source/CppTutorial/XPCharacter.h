@@ -10,6 +10,8 @@
 #include "InputMappingContext.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "TimeManager.h"
+#include "EngineUtils.h"
 #include "XPCharacter.generated.h"
 
 UCLASS()
@@ -45,9 +47,14 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
 	class UInputAction* MoveudAction;
 
+	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
+	class UInputAction* ReversalAction;
+
 	void Move(const FInputActionValue& InputValue);
 	void Look(const FInputActionValue& InputValue);
 	void UpAndDown(const FInputActionValue& InputValue);
+	void BeginReversal(const FInputActionValue& InputValue);
+	void EndReversal(const FInputActionValue& InputValue);
 
 private:
 	// Mesh being displayed
@@ -57,4 +64,6 @@ private:
 	// Camera to view the Scene
 	UPROPERTY(EditDefaultsOnly)
 	UCameraComponent* PlayerCamera;
+
+	ATimeManager* GetTimeManagerInstance();
 };

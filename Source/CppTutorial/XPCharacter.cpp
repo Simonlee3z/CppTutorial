@@ -21,6 +21,8 @@ void AXPCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Allow character control pitch
+	bUseControllerRotationPitch = true;
 }
 
 // Called every frame
@@ -50,6 +52,8 @@ void AXPCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		Input->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AXPCharacter::Move);
 		Input->BindAction(LookAction, ETriggerEvent::Triggered, this, &AXPCharacter::Look);
 		Input->BindAction(MoveudAction, ETriggerEvent::Triggered, this, &AXPCharacter::UpAndDown);
+		Input->BindAction(ReversalAction, ETriggerEvent::Started, this, &AXPCharacter::BeginReversal);
+		Input->BindAction(ReversalAction, ETriggerEvent::Completed, this, &AXPCharacter::EndReversal);
 	}
 }
 
@@ -61,10 +65,10 @@ void AXPCharacter::Move(const FInputActionValue& InputValue)
 	{
 		// Get forward direction
 		const FRotator Rotation = Controller->GetControlRotation();
-		//const FRotator YawRotation(Rotation.Pitch, Rotation.Yaw, Rotation.Roll);
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-		const FVector ForwardDirection = FRotationMatrix(Rotation).GetUnitAxis(EAxis::X);
-		const FVector RightDirection = FRotationMatrix(Rotation).GetUnitAxis(EAxis::Y);
+		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
 		// Add movement input
 		AddMovementInput(ForwardDirection, InputVector.Y);
@@ -94,5 +98,26 @@ void AXPCharacter::UpAndDown(const FInputActionValue& InputValue)
 		//添加日志输出调试确保值被正确处理
 		//UE_LOG(LogTemp, Warning, TEXT("Up/Down Input Value: %f"), Value);
 	}
+}
+
+void AXPCharacter::BeginReversal(const FInputActionValue& InputValue)
+{
+	ATimeManager* ATM = AXPCharacter::GetTimeManagerInstance();
+	ATM->BeginTimeReverse();
+}
+
+void AXPCharacter::EndReversal(const FInputActionValue& InputValue)
+{
+	ATimeManager* ATM = AXPCharacter::GetTimeManagerInstance();
+	ATM->EndTimeReverse();
+}
+
+ATimeManager* AXPCharacter::GetTimeManagerInstance()
+{
+	for (TActorIterator<ATimeManager> It(GetWorld()); It; ++It)
+	{
+		return *It;
+	}
+	return nullptr;
 }
 
