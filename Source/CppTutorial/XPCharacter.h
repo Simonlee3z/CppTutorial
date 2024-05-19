@@ -51,11 +51,15 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
 	class UInputAction* ReversalAction;
 
+	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
+	class UInputAction* InteractAction;
+
 	void Move(const FInputActionValue& InputValue);
 	void Look(const FInputActionValue& InputValue);
 	void UpAndDown(const FInputActionValue& InputValue);
 	void BeginReversal(const FInputActionValue& InputValue);
 	void EndReversal(const FInputActionValue& InputValue);
+	//void Interact(const FInputActionValue& InputValue);
 
 private:
 	// Mesh being displayed
@@ -71,4 +75,9 @@ private:
 	//UReverseTimeComponent* ReverseTime;
 
 	ATimeManager* GetTimeManagerInstance();
+
+//public:
+//	// Get Pressable Source Component
+//	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+//	TSubclassOf<UActorComponent> PressableSourceComponent;
 };
