@@ -12,6 +12,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "TimeManager.h"
 #include "EngineUtils.h"
+#include "ReverseTimeComponent.h"
 #include "XPCharacter.generated.h"
 
 UCLASS()
@@ -64,6 +65,10 @@ private:
 	// Camera to view the Scene
 	UPROPERTY(EditDefaultsOnly)
 	UCameraComponent* PlayerCamera;
+
+	//// Add Time manager component
+	//UPROPERTY(EditDefaultsOnly)
+	//UReverseTimeComponent* ReverseTime;
 
 	ATimeManager* GetTimeManagerInstance();
 };

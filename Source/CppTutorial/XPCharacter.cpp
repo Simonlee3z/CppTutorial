@@ -14,6 +14,8 @@ AXPCharacter::AXPCharacter()
 	PlayerMesh->SetupAttachment(GetCapsuleComponent());
 	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
 	PlayerCamera->SetupAttachment(GetCapsuleComponent());
+	//ReverseTime = CreateDefaultSubobject<UReverseTimeComponent>(TEXT("ReverseTime"));
+	//ReverseTime->SetupAttachment(GetCapsuleComponent());
 }
 
 // Called when the game starts or when spawned
@@ -82,7 +84,7 @@ void AXPCharacter::Look(const FInputActionValue& InputValue)
 
 	if (IsValid(Controller))
 	{
-		AddControllerYawInput(InputVector.X);
+		AddControllerYawInput(InputVector.X); 
 		AddControllerPitchInput(InputVector.Y);
 	}
 }
