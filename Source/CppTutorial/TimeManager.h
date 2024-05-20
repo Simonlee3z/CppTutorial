@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MathUtil.h"
 #include "GameFramework/Actor.h"
 #include "TimeManager.generated.h"
 
@@ -15,8 +16,16 @@ public:
 	// Sets default values for this actor's properties
 	ATimeManager();
 
+	// Actor tick
+	void Tick(float DeltaSeconds) override;
+
+	// Helper getters
 	UFUNCTION(BlueprintCallable)
 	float GetTimeFactor();
+	UFUNCTION(BlueprintCallable)
+	bool GetAbilityAvailiable();
+	UFUNCTION(BlueprintCallable)
+	float GetCurrentReversableTime();
 
 	// Time reverse control
 	UFUNCTION(BlueprintCallable)
@@ -24,18 +33,34 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void EndTimeReverse();
 
+	// Enable control
+	UFUNCTION(BlueprintCallable)
+	void EnableTimeReverseAbility();
+	UFUNCTION(BlueprintCallable)
+	void DisableTimeReverseAbility();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:
+protected:
 	// This is the current active factor of time
 	UPROPERTY(BlueprintReadOnly)
 	float CurrentTimeFactor = 1.0f;
+	UPROPERTY(BlueprintReadOnly)
+	float CurrentRecordedTime = 0.0f;
+	
+	UPROPERTY(BlueprintReadOnly)
+	bool TimeReversalAbilityEnabled = false;
 
-	// Magic time values
+public:
+	// Gloable ability preset
 	UPROPERTY(BlueprintReadWrite)
 	float NormalTimeFactor = 1.0f;
 	UPROPERTY(BlueprintReadWrite)
 	float ReverseTimeFactor = -3.0f;
+	UPROPERTY(BlueprintReadWrite)
+	float ReverseTimeThreshold = 3.0f;
+	UPROPERTY(BlueprintReadWrite)
+	float ReverseTimeMaximum = 15.0f;
 };
